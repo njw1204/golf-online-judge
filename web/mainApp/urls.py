@@ -1,4 +1,4 @@
-"""goj URL Configuration
+"""mainApp URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -13,14 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-import django.contrib.auth.views as authViews
-import mainApp.views as mainViews
+from django.urls import path
+from . import views as mainViews
 
+app_name = "mainApp"
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path("login/", authViews.LoginView.as_view(), name="login"),
-    path("signup/", mainViews.SignupView.as_view(), name="signup"),
-    path("", include("mainApp.urls", namespace="mainApp")),
+    path("", mainViews.IndexView.as_view(), name="index"),
 ]

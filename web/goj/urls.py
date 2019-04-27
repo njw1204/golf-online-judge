@@ -21,6 +21,7 @@ import mainApp.views as mainViews
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("login/", authViews.LoginView.as_view(), name="login"),
+    path("logout/", authViews.LogoutView.as_view(), name="logout"),
     path("signup/", mainViews.SignupView.as_view(), name="signup"),
     path("", include("mainApp.urls", namespace="mainApp")),
 ]

@@ -18,7 +18,11 @@
   {% endif %}
 
   <ul>
-    <li><a href="{% url 'login' %}">로그인</a></li>
+    {% if not request.user.is_authenticated %}
+      <li><a href="{% url 'login' %}">로그인</a></li>
+    {% else %}
+      <li><a href="{% url 'logout' %}">로그아웃</a></li>
+    {% endif %}
     <li><a href="{% url 'signup' %}">회원가입</a></li>
   </ul>
 </body>

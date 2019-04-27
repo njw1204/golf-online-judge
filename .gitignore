@@ -190,12 +190,8 @@ dmypy.json
 
 # Pyre type checker
 
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+### VisualStudioCode - Ignore ALL ###
+.vscode/
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files

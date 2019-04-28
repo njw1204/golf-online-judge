@@ -1,0 +1,39 @@
+{% extends "mainApp/base.html" %}
+
+{% block content %}
+<h3>문제 입니다.</h3>
+<div>
+  <div>
+    <h2>{{ problem.title }}</h2>
+  </div>
+
+  <div>
+    시간 제한 : {{ problem.time_limit }}초 / 생성일 : {{ problem.created_date|date:"Y-m-d" }}
+  </div>
+
+  <hr/>
+
+  <div>
+    <strong>문제</strong>
+    <p>
+        {{ problem.body }}
+    </p>
+    <strong>입력</strong>
+    <p>
+        {{ problem.input_explain }}
+    </p>
+    <strong>출력</strong>
+    <p>
+        {{ problem.output_explain }}
+    </p>
+    <strong>예제 입력</strong>
+    <p>
+        {{ problem.example_in }}
+    </p>
+    <strong>예제 출력</strong>
+    <p>
+        {{ problem.example_out }}
+    </p>
+  </div>
+</div>
+{% endblock %}

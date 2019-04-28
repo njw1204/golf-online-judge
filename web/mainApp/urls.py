@@ -14,9 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
+from django.views.generic.base import RedirectView
 from . import views as mainViews
 
 app_name = "mainApp"
 urlpatterns = [
     path("", mainViews.IndexView.as_view(), name="index"),
+    path("problems/<int:current_page>/", mainViews.ProblemListView.as_view(), name="problems"),
+    path("problems/", RedirectView.as_view(url="/problems/1/", permanent=True)),
+    path("<int:pk>/", mainViews.ProblemView.as_view(), name="problem"),
 ]

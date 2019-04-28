@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Golf Online Judge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <h1><a href="/">Welcome to GOJ</a></h1>
+
+  {% if request.user.is_authenticated %}
+  <strong>
+    {{ request.user }}님 어서오세요.
+  </strong>
+  {% endif %}
+
+  <ul>
+    <li><a href="{% url 'mainApp:problems' current_page=1 %}">문제</a></li>
+  </ul>
+
+  <ul>
+    {% if not request.user.is_authenticated %}
+      <li><a href="{% url 'login' %}">로그인</a></li>
+    {% else %}
+      <li><a href="{% url 'logout' %}">로그아웃</a></li>
+    {% endif %}
+    <li><a href="{% url 'signup' %}">회원가입</a></li>
+  </ul>
+
+  {% block content %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+{% extends "mainApp/base.html" %}
+
+{% block content %}
+<h3>문제목록 입니다.</h3>
+<div>
+  <div>
+  {% for i in pages %}
+    <a href="{% url 'mainApp:problems' current_page=i %}">
+      {% if i == current_page %}
+        <strong>{{ i }}</strong>
+      {% else %}
+        {{ i }}
+      {% endif %}
+    </a>
+  {% endfor %}
+  </div>
+
+  <hr/>
+
+  <div>
+    번호, 제목
+  </div>
+
+  <hr/>
+
+  {% for problem in problems %}
+    <div>
+      <strong>{{ problem.id }}</strong>
+      <a href="{% url 'mainApp:problem' pk=problem.id %}">
+        {{ problem.title }}
+      </a>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

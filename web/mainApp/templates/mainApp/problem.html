@@ -1,4 +1,4 @@
-{% extends "mainApp/base.html" %}
+﻿{% extends "mainApp/base.html" %}
 
 {% block content %}
 <h3>문제 입니다.</h3>
@@ -16,23 +16,23 @@
   <div>
     <strong>문제</strong>
     <p>
-        {{ problem.body }}
+        {{ problem.body|linebreaksbr }}
     </p>
     <strong>입력</strong>
     <p>
-        {{ problem.input_explain }}
+        {{ problem.input_explain|linebreaksbr }}
     </p>
     <strong>출력</strong>
     <p>
-        {{ problem.output_explain }}
+        {{ problem.output_explain|linebreaksbr }}
     </p>
     <strong>예제 입력</strong>
     <p>
-        {{ problem.example_in }}
+        {{ problem.example_in|linebreaksbr }}
     </p>
     <strong>예제 출력</strong>
     <p>
-        {{ problem.example_out }}
+        {{ problem.example_out|linebreaksbr }}
     </p>
   </div>
 </div>

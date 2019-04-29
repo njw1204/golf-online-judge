@@ -18,6 +18,7 @@ class CustomUserCreateForm(UserCreationForm):
         return user
 
     def clean(self):
+        super().clean()
         if User.objects.filter(email=self.cleaned_data.get("email")).exists():
-            raise ValidationError("이미 가입된 이메일입니다.")
+            raise ValidationError({"email": "이미 등록된 이메일입니다."})
         return self.cleaned_data

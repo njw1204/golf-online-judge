@@ -3,6 +3,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth import login
+from django.contrib import messages
 from .forms import CustomUserCreateForm
 from . import models as mainModels
 
@@ -15,6 +16,7 @@ class SignupView(CreateView):
     def form_valid(self, form):
         self.object = form.save()
         login(self.request, self.object)
+        messages.info(self.request, self.object.username + "님, 회원가입을 환영합니다.")
         return redirect(self.get_success_url())
 
 
@@ -35,6 +37,7 @@ class ProblemListView(TemplateView):
 
         # 현재 페이지가 유효범위 안에 있어야 함
         if not (1 <= kwargs["current_page"] <= kwargs["last_page"]):
+            messages.info(request, "문제가 존재하지 않습니다.")
             return redirect("mainApp:index")
 
         kwargs["pages"] = range(1, kwargs["last_page"] + 1)
@@ -53,6 +56,7 @@ class ProblemView(TemplateView):
         # 현재 문제가 존재해야 됨
         result = mainModels.ProblemPost.objects.filter(pk=kwargs["pk"])
         if not result.exists():
+            messages.info(request, "문제가 존재하지 않습니다.")
             return redirect("mainApp:index")
 
         kwargs["problem"] = result[0]

@@ -1,35 +1,41 @@
 {% extends "mainApp/base.html" %}
 
 {% block content %}
-<h3>문제목록 입니다.</h3>
 <div>
-  <div>
-  {% for i in pages %}
-    <a href="{% url 'mainApp:problems' current_page=i %}">
+  <table class="table table-hover table-bordered">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col" style="width: 60px;">#</th>
+        <th scope="col">문제 이름</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for problem in problems %}
+      <tr>
+        <td>{{ problem.id }}</td>
+        <td>
+          <a href="{% url 'mainApp:problem' pk=problem.id %}">
+            {{ problem.title }}
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <hr/>
+
+  <div style="font-size: 17px;">
+    Pages :
+    {% for i in pages %}
+    <a href="{% url 'mainApp:problems' current_page=i %}" style="color: black; text-decoration: none; margin: 2px;">
       {% if i == current_page %}
-        <strong>{{ i }}</strong>
+      <span style="color: green; font-weight: bold; text-decoration: underline;">{{ i }}</span>
       {% else %}
-        {{ i }}
+      {{ i }}
       {% endif %}
     </a>
-  {% endfor %}
+    {% endfor %}
   </div>
-
-  <hr/>
-
-  <div>
-    번호, 제목
-  </div>
-
-  <hr/>
-
-  {% for problem in problems %}
-    <div>
-      <strong>{{ problem.id }}</strong>
-      <a href="{% url 'mainApp:problem' pk=problem.id %}">
-        {{ problem.title }}
-      </a>
-    </div>
-  {% endfor %}
 </div>
 {% endblock %}

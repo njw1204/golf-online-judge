@@ -1,7 +1,6 @@
 ﻿{% extends "mainApp/base.html" %}
 
 {% block content %}
-<h3>문제 입니다.</h3>
 <div>
   <div>
     <h2>{{ problem.title }}</h2>
@@ -14,29 +13,73 @@
   <hr />
 
   <div>
-    <strong>문제</strong>
-    <p>
-      {{ problem.body|linebreaksbr }}
-    </p>
-    <strong>입력</strong>
-    <p>
-      {{ problem.input_explain|linebreaksbr }}
-    </p>
-    <strong>출력</strong>
-    <p>
-      {{ problem.output_explain|linebreaksbr }}
-    </p>
-    <strong>예제 입력</strong>
-    <p>
-      {{ problem.example_in|linebreaksbr }}
-    </p>
-    <strong>예제 출력</strong>
-    <p>
-      {{ problem.example_out|linebreaksbr }}
-    </p>
+    <div class="card border-secondary" style="margin-bottom: 20px;">
+      <div class="card-header">
+        <strong>문제</strong>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          {{ problem.body|linebreaksbr }}
+        </p>
+      </div>
+    </div>
+
+    <div class="card border-secondary" style="margin-bottom: 20px;">
+      <div class="card-header">
+        <strong>입력</strong>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          {{ problem.input_explain|linebreaksbr }}
+        </p>
+      </div>
+    </div>
+
+    <div class="card border-secondary" style="margin-bottom: 20px;">
+      <div class="card-header">
+        <strong>출력</strong>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          {{ problem.output_explain|linebreaksbr }}
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="col-lg-6">
+        <div class="card" style="margin-bottom: 20px;">
+          <div class="card-header">
+            <strong>예제 입력</strong>
+          </div>
+          <div class="card-body">
+            <p class="card-text" style="font-family: 'Source Code Pro', monospace; font-size: 18px; min-height: 27px;">
+                {{ problem.example_in|linebreaksbr }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card" style="margin-bottom: 20px;">
+          <div class="card-header">
+            <strong>예제 출력</strong>
+          </div>
+          <div class="card-body">
+            <p class="card-text" style="font-family: 'Source Code Pro', monospace; font-size: 18px; min-height: 27px;">
+                {{ problem.example_out|linebreaksbr }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 </div>
-<div id="disqus_thread">
+
+<div id="disqus_thread" style="margin-top: 30px;">
   {% load disqus_tags %}
   {% set_disqus_url full_absolute_url %}
   {% disqus_show_comments %}

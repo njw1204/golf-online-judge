@@ -60,4 +60,5 @@ class ProblemView(TemplateView):
             return redirect("mainApp:index")
 
         kwargs["problem"] = result[0]
+        kwargs["full_absolute_url"] = request.build_absolute_uri(result[0].get_absolute_url())
         return super().dispatch(request, *args, **kwargs)

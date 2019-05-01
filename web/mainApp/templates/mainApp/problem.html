@@ -38,7 +38,7 @@
 </div>
 <div id="disqus_thread">
   {% load disqus_tags %}
-  {% set_disqus_url problem.get_absolute_url %}
+  {% set_disqus_url full_absolute_url %}
   {% disqus_show_comments %}
 </div>
 {% endblock %}

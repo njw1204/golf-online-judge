@@ -10,6 +10,7 @@
 - Gunicorn 로그 설정 (logrotate로 로그 관리, Nginx 로그는 끄기)
 - certbot을 이용해 ssl 인증서 자동 갱신 및 https 설정 (certbot.timer 활성화 시키기)
 - 정기적인 재부팅 설정 (crontab 등 이용)
+- Django Site 모델 도메인 등록 (admin 페이지 또는 python3 manage.py shell 이용)
 
 <br/>
 

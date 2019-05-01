@@ -6,31 +6,35 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Golf Online Judge</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 
 <body>
-  <h1><a href="/">Welcome to GOJ</a></h1>
+  <div class="container">
+    <h1><a href="/">Welcome to GOJ</a></h1>
 
-  {% if request.user.is_authenticated %}
-  <strong>
-    {{ request.user }}님 어서오세요.
-  </strong>
-  {% endif %}
-
-  <ul>
-    <li><a href="{% url 'mainApp:problems' current_page=1 %}">문제</a></li>
-  </ul>
-
-  <ul>
-    {% if not request.user.is_authenticated %}
-      <li><a href="{% url 'login' %}">로그인</a></li>
-    {% else %}
-      <li><a href="{% url 'logout' %}">로그아웃</a></li>
+    {% if request.user.is_authenticated %}
+    <strong>
+      {{ request.user }}님 어서오세요.
+    </strong>
     {% endif %}
-    <li><a href="{% url 'signup' %}">회원가입</a></li>
-  </ul>
 
-  {% block content %}{% endblock %}
+    <ul>
+      <li><a href="{% url 'mainApp:problems' current_page=1 %}">문제</a></li>
+    </ul>
+
+    <ul>
+      {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'login' %}">로그인</a></li>
+      {% else %}
+        <li><a href="{% url 'logout' %}">로그아웃</a></li>
+      {% endif %}
+      <li><a href="{% url 'signup' %}">회원가입</a></li>
+    </ul>
+
+    {% block content %}{% endblock %}
+  </div>
 </body>
 
 </html>

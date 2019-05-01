@@ -1,5 +1,6 @@
 from django.db import models
 from django.forms import ValidationError
+from django.urls import reverse
 
 # Create your models here.
 
@@ -17,3 +18,6 @@ class ProblemPost(models.Model):
     example_out = models.TextField(max_length=1000, blank=True)
     time_limit = models.PositiveSmallIntegerField(validators=[isValidTimeLimit])
     created_date = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse("mainApp:problem", kwargs={"pk": self.pk})

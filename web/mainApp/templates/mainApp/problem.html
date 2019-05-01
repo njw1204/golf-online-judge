@@ -11,29 +11,34 @@
     시간 제한 : {{ problem.time_limit }}초 / 생성일 : {{ problem.created_date|date:"Y-m-d" }}
   </div>
 
-  <hr/>
+  <hr />
 
   <div>
     <strong>문제</strong>
     <p>
-        {{ problem.body|linebreaksbr }}
+      {{ problem.body|linebreaksbr }}
     </p>
     <strong>입력</strong>
     <p>
-        {{ problem.input_explain|linebreaksbr }}
+      {{ problem.input_explain|linebreaksbr }}
     </p>
     <strong>출력</strong>
     <p>
-        {{ problem.output_explain|linebreaksbr }}
+      {{ problem.output_explain|linebreaksbr }}
     </p>
     <strong>예제 입력</strong>
     <p>
-        {{ problem.example_in|linebreaksbr }}
+      {{ problem.example_in|linebreaksbr }}
     </p>
     <strong>예제 출력</strong>
     <p>
-        {{ problem.example_out|linebreaksbr }}
+      {{ problem.example_out|linebreaksbr }}
     </p>
   </div>
+</div>
+<div id="disqus_thread">
+  {% load disqus_tags %}
+  {% set_disqus_url problem.get_absolute_url %}
+  {% disqus_show_comments %}
 </div>
 {% endblock %}

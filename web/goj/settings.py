@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from . import secret
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'crispy_forms',
+    'disqus',
     'mainApp',
 ]
 
@@ -130,3 +133,9 @@ LOGOUT_REDIRECT_URL = 'mainApp:index'
 LOGIN_URL = 'login'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+DISQUS_API_SECRET = secret.DISQUS_API_SECRET
+DISQUS_API_KEY = secret.DISQUS_API_KEY
+DISQUS_WEBSITE_SHORTNAME = secret.DISQUS_WEBSITE_SHORTNAME
+
+SITE_ID = 1

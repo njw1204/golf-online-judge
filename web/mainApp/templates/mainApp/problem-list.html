@@ -12,7 +12,7 @@
     <tbody>
       {% for problem in problems %}
       <tr>
-        <td>{{ problem.id }}</td>
+        <th>{{ problem.id }}</th>
         <td>
           <a href="{% url 'mainApp:problem' pk=problem.id %}">
             {{ problem.title }}
@@ -25,15 +25,14 @@
 
   <hr/>
 
-  <div style="font-size: 17px;">
-    Pages :
+  <div style="font-size: 18px;">
     {% for i in pages %}
-    <a href="{% url 'mainApp:problems' current_page=i %}" style="color: black; margin: 2px;">
       {% if i == current_page %}
-        <span class="text-success" style="font-weight: bold; text-decoration: underline;">{{ i }}</span>
+        <a class="btn btn-primary btn-sm" href="{% url 'mainApp:problems' current_page=i %}" style="margin-left: 3px; font-weight: bold;">
       {% else %}
-        <span style="text-decoration: underline;">{{ i }}</span>
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'mainApp:problems' current_page=i %}" style="margin: 3px;">
       {% endif %}
+      {{ i }}
     </a>
     {% endfor %}
   </div>

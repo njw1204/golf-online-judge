@@ -19,6 +19,12 @@
       {{ form|crispy }}
       <button type="submit" class="btn btn-primary">로그인</button>
     </form>
+
+    <hr/>
+    <br/>
+
+    <span style="margin-right: 10px;">계정이 없으신가요?</span>
+    <a href="{% url 'signup' %}" class="btn btn-success" role="button">회원가입</a>
   </div>
 </body>
 

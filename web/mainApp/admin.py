@@ -8,3 +8,8 @@ from . import models as mainModels
 class ProblemPostAdmin(admin.ModelAdmin):
     list_display = ["id", "title", "body", "time_limit", "created_date"]
     list_display_links = ["id", "title"]
+
+@admin.register(mainModels.SolvePost)
+class SolvePostAdmin(admin.ModelAdmin):
+    list_display = ["id", "user_pk", "problem_pk", "result"]
+    list_display_links = ["id"]

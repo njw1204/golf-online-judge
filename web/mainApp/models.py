@@ -21,3 +21,16 @@ class ProblemPost(models.Model):
 
     def get_absolute_url(self):
         return reverse("mainApp:problem", kwargs={"pk": self.pk})
+
+class SolvePost(models.Model):
+    user_pk = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    problem_pk = models.ForeignKey("ProblemPost", on_delete=models.CASCADE)
+    body = models.TextField(max_length=100000, blank=True)
+    lang = models.PositiveSmallIntegerField(choices=(
+        (1, "python3"),
+    ))
+    result = models.PositiveSmallIntegerField(choices=(
+        (1, "Pass"),
+        (2, "Fail"),
+        (3, "Wait")
+    ))

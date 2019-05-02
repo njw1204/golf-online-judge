@@ -28,11 +28,11 @@
   <div style="font-size: 17px;">
     Pages :
     {% for i in pages %}
-    <a href="{% url 'mainApp:problems' current_page=i %}" style="color: black; text-decoration: none; margin: 2px;">
+    <a href="{% url 'mainApp:problems' current_page=i %}" style="color: black; margin: 2px;">
       {% if i == current_page %}
-      <span style="color: green; font-weight: bold; text-decoration: underline;">{{ i }}</span>
+        <span class="text-success" style="font-weight: bold; text-decoration: underline;">{{ i }}</span>
       {% else %}
-      {{ i }}
+        <span style="text-decoration: underline;">{{ i }}</span>
       {% endif %}
     </a>
     {% endfor %}

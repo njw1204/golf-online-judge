@@ -22,5 +22,6 @@ urlpatterns = [
     path("", mainViews.IndexView.as_view(), name="index"),
     path("problems/<int:current_page>/", mainViews.ProblemListView.as_view(), name="problems"),
     path("problems/", RedirectView.as_view(url="/problems/1/", permanent=True)),
+    path("submit/<int:problem_pk>/", mainViews.ProblemSubmitView.as_view(), name="problem-submit"),
     path("<int:pk>/", mainViews.ProblemView.as_view(), name="problem"),
 ]

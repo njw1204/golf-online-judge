@@ -139,3 +139,5 @@ DISQUS_API_KEY = secret.DISQUS_API_KEY
 DISQUS_WEBSITE_SHORTNAME = secret.DISQUS_WEBSITE_SHORTNAME
 
 SITE_ID = 1
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

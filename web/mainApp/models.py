@@ -25,12 +25,13 @@ class ProblemPost(models.Model):
 class SolvePost(models.Model):
     user_pk = models.ForeignKey("auth.User", on_delete=models.CASCADE)
     problem_pk = models.ForeignKey("ProblemPost", on_delete=models.CASCADE)
-    body = models.TextField(max_length=100000, blank=True)
+    body = models.TextField(max_length=100000)
     lang = models.PositiveSmallIntegerField(choices=(
         (1, "python3"),
-    ))
+    ), default=1)
     result = models.PositiveSmallIntegerField(choices=(
         (1, "Pass"),
         (2, "Fail"),
         (3, "Wait")
-    ))
+    ), default=3)
+    show = models.BooleanField(default=True)

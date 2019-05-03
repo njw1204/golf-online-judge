@@ -6,6 +6,7 @@ from django.contrib.auth import login
 from django.contrib import messages
 from .forms import CustomUserCreateForm
 from . import models as mainModels
+from . import forms as mainForms
 
 # Create your views here.
 class SignupView(CreateView):
@@ -62,3 +63,33 @@ class ProblemView(TemplateView):
         kwargs["problem"] = result[0]
         kwargs["full_absolute_url"] = request.build_absolute_uri(result[0].get_absolute_url())
         return super().dispatch(request, *args, **kwargs)
+
+
+class ProblemSubmitView(CreateView):
+    template_name = "mainApp/problem-submit.html"
+    form_class = mainForms.SolvePostForm
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            self.kwargs["problem"] = mainModels.ProblemPost.objects.filter(pk=self.kwargs["problem_pk"]).first()
+            if not request.user.is_authenticated:
+                messages.info(request, "로그인을 해주세요.")
+                return redirect(self.kwargs["problem"].get_absolute_url())
+        except:
+            return redirect("mainApp:problems", current_page=1)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["problem"] = self.kwargs["problem"]
+        return context
+
+    def get_success_url(self):
+        return self.kwargs["problem"].get_absolute_url()
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user_pk = self.request.user
+        self.object.problem_pk = self.kwargs["problem"]
+        self.object.save()
+        return redirect(self.get_success_url(), pk=self.kwargs["problem_pk"])

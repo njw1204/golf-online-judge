@@ -1,0 +1,41 @@
+{% extends "mainApp/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'codemirror/lib/codemirror.css' %}">
+<link rel="stylesheet" href="{% static 'codemirror/theme/eclipse.css' %}">
+<script src="{% static 'codemirror/lib/codemirror.js' %}"></script>
+<script src="{% static 'codemirror/mode/python/python.js' %}"></script>
+
+<script>
+  $(function() {
+    var codeArea = $('form textarea[name="body"]')[0];
+    var editor = CodeMirror.fromTextArea(codeArea, {
+      lineNumbers: true,
+      lineWrapping: true,
+      mode: "python",
+      theme: "eclipse",
+      value: codeArea.value
+    });
+  });
+</script>
+
+<style>
+  .CodeMirror {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 16px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+  <h4 class="mb-3 pt-1">#{{ problem.pk }} - {{ problem.title }}</h4>
+  <form method="POST" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary">제출</button>
+  </form>
+</div>
+{% endblock %}

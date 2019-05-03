@@ -14,6 +14,14 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&subset=korean" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+  {% if messages %}
+  <script>
+    // {% for message in messages %}
+    alert("{{ message }}");
+    // {% endfor %}
+  </script>
+  {% endif %}
 </head>
 
 <body>
@@ -64,6 +72,8 @@
       <strong>
         {{ request.user }}
       </strong>
+      {% else %}
+        로그인 후 문제를 풀 수 있습니다.
       {% endif %}
 
       {% if not request.user.is_authenticated %}

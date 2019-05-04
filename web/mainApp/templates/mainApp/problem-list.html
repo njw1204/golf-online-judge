@@ -30,7 +30,7 @@
       {% if i == current_page %}
         <a class="btn btn-primary btn-sm" href="{% url 'mainApp:problems' current_page=i %}" style="margin-left: 3px; font-weight: bold;" role="button">
       {% else %}
-        <a class="btn btn-outline-primary btn-sm" href="{% url 'mainApp:problems' current_page=i %}" style="margin: 3px;" role="button">
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'mainApp:problems' current_page=i %}" style="margin-left: 3px;" role="button">
       {% endif %}
       {{ i }}
     </a>

@@ -23,15 +23,19 @@ class ProblemPost(models.Model):
         return reverse("mainApp:problem", kwargs={"pk": self.pk})
 
 class SolvePost(models.Model):
-    user_pk = models.ForeignKey("auth.User", on_delete=models.CASCADE)
-    problem_pk = models.ForeignKey("ProblemPost", on_delete=models.CASCADE)
-    body = models.TextField(max_length=100000)
-    lang = models.PositiveSmallIntegerField(choices=(
+    LANG_CHOICES = (
         (1, "python3"),
-    ), default=1)
-    result = models.PositiveSmallIntegerField(choices=(
+    )
+    RESULT_CHOICES = (
         (1, "Pass"),
         (2, "Fail"),
         (3, "Wait")
-    ), default=3)
+    )
+
+    user_pk = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    problem_pk = models.ForeignKey("ProblemPost", on_delete=models.CASCADE)
+    body = models.TextField(max_length=100000)
+    lang = models.PositiveSmallIntegerField(choices=LANG_CHOICES, default=1)
+    result = models.PositiveSmallIntegerField(choices=RESULT_CHOICES, default=3)
     show = models.BooleanField(default=True)
+    created_date = models.DateTimeField(auto_now_add=True)

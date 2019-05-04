@@ -1,14 +1,18 @@
 ﻿{% extends "mainApp/base.html" %}
 
+{% block head %}
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&subset=korean" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 <div>
   <div style="margin-bottom: 10px;">
     <div>
       <h4 class="mb-3 pt-1" style="float: left;">#{{ pk }} - {{ problem.title }}</h4>
 
-      <div class="mb-3" style="float: right;">
-        <button class="btn btn-primary">랭킹</button>
-        <button class="btn btn-info">채점 현황</button>
+      <div class="mb-3 problem-func" style="float: right;">
+        <a href="#" class="btn btn-primary" role="button">랭킹</a>
+        <a href="{% url 'mainApp:problem-status' problem_pk=pk current_page=1 %}" class="btn btn-info" role="button">채점 현황</a>
         <a href="{% url 'mainApp:problem-submit' problem_pk=pk %}" class="btn btn-success" role="button">코드 제출</a>
       </div>
 

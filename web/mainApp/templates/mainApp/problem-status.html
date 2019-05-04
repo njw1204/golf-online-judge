@@ -1,0 +1,104 @@
+{% extends "mainApp/base.html" %}
+
+{% block head %}
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
+  <style>
+    .tooltip-inner {
+      font-family: sans-serif;
+      font-size: 13px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div>
+  <h4 class="mt-1">
+    {{ heading }}&nbsp;
+    <a href="javascript: location.reload(true);" data-placement="bottom" data-toggle="tooltip" title="새로고침">
+      <i class="fas fa-sync-alt"></i>
+    </a>
+  </h4>
+  <br/>
+
+  <div class="table-responsive" style="white-space: nowrap;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">채점 번호</th>
+          <th scope="col">아이디</th>
+          <th scope="col" style>문제 번호</th>
+          <th scope="col">언어</th>
+          <th scope="col">코드 길이</th>
+          <th scope="col">제출 시간</th>
+          <th scope="col">채점 결과</th>
+          <th scope="col">코드 보기</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for submit in submits %}
+        <tr>
+          <th>{{ submit.id|stringformat:"06d" }}</th>
+          <td>{{ submit.user_pk }}</td>
+          <td>
+            <a href="{% url 'mainApp:problem' pk=submit.problem_pk.pk %}">
+              #{{ submit.problem_pk.pk }}
+            </a>
+          </td>
+          <td>
+            {{ submit.get_lang_display }}
+          </td>
+          <td>
+            {{ submit.body|length }} Bytes
+          </td>
+          <td>
+            {{ submit.created_date|date:"Y-m-d H:i:s" }}
+          </td>
+          <td style="font-family: 'Roboto', sans-serif; letter-spacing: 1.5px;">
+            {% if submit.result == 1 %}
+              <span class="badge badge-success" data-toggle="tooltip" title="맞았습니다">OK</span>
+            {% elif submit.result == 2 %}
+              <span class="badge badge-danger" data-toggle="tooltip" title="틀렸습니다">FAIL</span>
+            {% else %}
+              <span class="badge badge-secondary" data-toggle="tooltip" title="채점 대기중">WAIT</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'mainApp:index' %}">
+              <i class="fas fa-external-link-alt"></i> View
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <hr/>
+
+  <div style="font-size: 18px;">
+    {% for i in pages %}
+      <!-- page a tag start -->
+      <a
+      {% if single_mode %}
+        href="{% url 'mainApp:problem-status' problem_pk=problem_pk current_page=i %}" role="button"
+      {% else %}
+        href="{% url 'mainApp:problem-status-all' current_page=i %}" role="button"
+      {% endif %}
+
+      {% if i == current_page %}
+        class="btn btn-primary btn-sm" style="margin-left: 3px; font-weight: bold;">
+      {% else %}
+        class="btn btn-outline-primary btn-sm" style="margin-left: 3px;">
+      {% endif %}
+
+      {{ i }}
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

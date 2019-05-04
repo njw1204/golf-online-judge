@@ -36,8 +36,9 @@ class ProblemListView(TemplateView):
         if kwargs["problem_total_count"] % problem_per_page == 0:
             kwargs["last_page"] -= 1
 
-        # 현재 페이지가 유효범위 안에 있어야 함
-        if not (1 <= kwargs["current_page"] <= kwargs["last_page"]):
+        # 현재 페이지가 유효범위 안에 있어야 함 or 문제가 하나도 없으면 OK
+        if not (1 <= kwargs["current_page"] <= kwargs["last_page"]) \
+            and not (kwargs["current_page"] == 1 and kwargs["last_page"] == 0):
             messages.info(request, "문제가 존재하지 않습니다.")
             return redirect("mainApp:index")
 
@@ -93,3 +94,42 @@ class ProblemSubmitView(CreateView):
         self.object.problem_pk = self.kwargs["problem"]
         self.object.save()
         return redirect(self.get_success_url(), pk=self.kwargs["problem_pk"])
+
+
+class ProblemStatusView(TemplateView):
+    template_name = "mainApp/problem-status.html"
+
+    def get(self, request, *args, **kwargs):
+        submit_per_page = 10 # 한 페이지에 보여줄 제출수
+
+        single_mode = False
+        if "problem_pk" in kwargs:
+            # problem_pk에 해당하는 문제가 존재하면 그에 맞는 채점 현황만 로드
+            result = mainModels.ProblemPost.objects.filter(pk=kwargs["problem_pk"])
+            if result.exists():
+                submits = mainModels.SolvePost.objects.filter(problem_pk=result.first(), show=True).order_by("-pk")
+                kwargs["heading"] = str(kwargs["problem_pk"]) + "번 문제 채점 현황"
+                single_mode = True
+
+        if not single_mode:
+            # 그런 문제가 없으면 전체 채점 현황을 로드
+            submits = mainModels.SolvePost.objects.filter(show=True).order_by("-pk")
+            kwargs["heading"] = "전체 채점 현황"
+
+        kwargs["single_mode"] = single_mode
+        kwargs["total_count"] = submits.count() # 제출 총 개수
+        kwargs["last_page"] = kwargs["total_count"] // submit_per_page + 1 # 마지막 페이지 번호
+        if kwargs["total_count"] % submit_per_page == 0:
+            kwargs["last_page"] -= 1
+
+        # 현재 페이지가 유효범위 안에 있어야 함 or 제출 현황이 하나도 없으면 OK
+        if not (1 <= kwargs["current_page"] <= kwargs["last_page"]) \
+            and not (kwargs["current_page"] == 1 and kwargs["last_page"] == 0):
+            return redirect("mainApp:index")
+
+        kwargs["pages"] = range(1, kwargs["last_page"] + 1)
+        show_start_range = (kwargs["current_page"] - 1) * submit_per_page
+        show_end_range = show_start_range + submit_per_page
+        kwargs["submits"] = submits[show_start_range:show_end_range]
+
+        return super().get(request, *args, **kwargs)

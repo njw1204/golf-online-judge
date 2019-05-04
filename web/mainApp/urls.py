@@ -23,5 +23,7 @@ urlpatterns = [
     path("problems/<int:current_page>/", mainViews.ProblemListView.as_view(), name="problems"),
     path("problems/", RedirectView.as_view(url="/problems/1/", permanent=True)),
     path("submit/<int:problem_pk>/", mainViews.ProblemSubmitView.as_view(), name="problem-submit"),
+    path("status/<int:problem_pk>/<int:current_page>/", mainViews.ProblemStatusView.as_view(), name="problem-status"),
+    path("status-all/<int:current_page>/", mainViews.ProblemStatusView.as_view(), name="problem-status-all"),
     path("<int:pk>/", mainViews.ProblemView.as_view(), name="problem"),
 ]

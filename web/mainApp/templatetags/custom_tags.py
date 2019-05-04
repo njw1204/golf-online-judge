@@ -19,3 +19,7 @@ def human_readable(value, arg):
            return value[arg]
        except KeyError:
            return ""
+
+@register.filter
+def length_in_bytes(value):
+    return len(value.encode("utf-8"))

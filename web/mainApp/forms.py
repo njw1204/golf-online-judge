@@ -55,4 +55,5 @@ class SolvePostForm(forms.ModelForm):
         body = self.cleaned_data["body"]
         if type(body) != str or len(body.strip()) == 0:
             raise ValidationError("코드가 너무 짧습니다.")
+        body = body.replace("\r\n", "\n")
         return body

@@ -1,4 +1,5 @@
 {% extends "mainApp/base.html" %}
+{% load custom_tags %}
 
 {% block head %}
   <link href="https://fonts.googleapis.com/css?family=Roboto|Source+Code+Pro&subset=korean" rel="stylesheet">
@@ -139,7 +140,7 @@
             {{ submit.get_lang_display }}
           </td>
           <td>
-            {{ submit.body|length }} Bytes
+            {{ submit.body|length_in_bytes }} Bytes
           </td>
           <td>
             {{ submit.created_date|date:"Y-m-d H:i:s" }}

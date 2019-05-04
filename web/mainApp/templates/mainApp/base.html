@@ -101,18 +101,15 @@
     <div class="container" style="max-height: 999999px;">
       <div>
         {% if request.user.is_authenticated %}
-        User :
-        <strong>
-          {{ request.user }}
-        </strong>
+          User : {{ request.user }}
         {% else %}
           로그인 후 문제를 풀 수 있습니다.
         {% endif %}
 
         {% if not request.user.is_authenticated %}
-        <a href="{% url 'login' %}" class="btn btn-outline-info" role="button" style="margin-left: 10px;">로그인</a>
+          <a href="{% url 'login' %}" class="btn btn-outline-info" role="button" style="margin-left: 10px;">로그인</a>
         {% else %}
-        <a href="{% url 'logout' %}" class="btn btn-outline-info" role="button" style="margin-left: 10px;">로그아웃</a>
+          <a href="{% url 'logout' %}" class="btn btn-outline-info" role="button" style="margin-left: 10px;">로그아웃</a>
         {% endif %}
       </div>
       <hr />

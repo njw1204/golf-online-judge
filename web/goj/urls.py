@@ -17,10 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 import django.contrib.auth.views as authViews
 import mainApp.views as mainViews
+import mainApp.forms as mainForms
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("login/", authViews.LoginView.as_view(), name="login"),
+    path("login/", authViews.LoginView.as_view(authentication_form=mainForms.CustomLoginForm), name="login"),
     path("logout/", authViews.LogoutView.as_view(), name="logout"),
     path("signup/", mainViews.SignupView.as_view(), name="signup"),
     path("", include("mainApp.urls", namespace="mainApp")),

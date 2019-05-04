@@ -23,12 +23,12 @@
       <table class="table table-sm">
         <thead>
           <tr>
-            <th style="width: 16%">시간 제한</th>
-            <th style="width: 16%">메모리 제한</th>
-            <th style="width: 17%">길이 제한</th>
-            <th style="width: 17%">제출</th>
-            <th style="width: 17%">정답</th>
-            <th style="width: 17%">맞은 사람</th>
+            <th style="width: 16%" scope="col">시간 제한</th>
+            <th style="width: 16%" scope="col">메모리 제한</th>
+            <th style="width: 17%" scope="col">길이 제한</th>
+            <th style="width: 17%" scope="col">제출</th>
+            <th style="width: 17%" scope="col">정답</th>
+            <th style="width: 17%" scope="col">맞은 사람</th>
           </tr>
         </thead>
         <tbody>
@@ -117,7 +117,7 @@
   <footer class="blockquote-footer">Written by njw1204, {{ problem.created_date|date:"Y-m-d" }}.</footer>
 </blockquote>
 
-<div id="disqus_thread" style="margin-top: 30px;">
+<div style="margin-top: 30px;">
   {% load disqus_tags %}
   {% set_disqus_url full_absolute_url %}
   {% disqus_show_comments %}

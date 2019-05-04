@@ -1,18 +1,104 @@
 {% extends "mainApp/base.html" %}
 
 {% block head %}
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <script>
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();
-    });
-  </script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto|Source+Code+Pro&subset=korean" rel="stylesheet">
+
   <style>
     .tooltip-inner {
       font-family: sans-serif;
       font-size: 13px;
     }
+    .dimmed {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: black;
+      opacity: 0.5;
+      z-index: 10;
+    }
+    div.codeblock {
+      display: none;
+      position: absolute;
+      width: 500px;
+      max-width: 80vw;
+      height: 430px;
+      max-height: 80vh;
+      background-color: #cccccc;
+      z-index: 20;
+    }
+    span.codeblock-title {
+      position: absolute;
+      font-size: 14px;
+      top: 15px;
+      left: 5px;
+      transform: translate(0%, -50%);
+      font-weight: bold;
+    }
+    button.codeblock-close {
+      position: absolute;
+      left: 100%;
+      width: 30px;
+      height: 30px;
+      transform: translate(-100%, 0);
+      border-radius: 0;
+      z-index: 1;
+    }
+    textarea.codearea {
+      position: relative;
+      top: 30px;
+      width: 100%;
+      height: 100%;
+      margin: 1px;
+      font-family: 'Source Code Pro', sans-serif;
+      font-size: 14px;
+      resize: none;
+    }
   </style>
+
+  <script>
+    $(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+
+      jQuery.fn.center = function () {
+        this.css("position", "absolute");
+        this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) +
+          $(window).scrollTop()) + "px");
+        this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) +
+          $(window).scrollLeft()) + "px");
+        return this;
+      }
+
+      $("div.codeblock").draggable();
+
+      $("button.codeblock-close").click(closeCodeBlock);
+
+      $("a.view-code").click(function() {
+        var pk = $(this).attr("data-pk");
+        var body = $(this).attr("data-body");
+        $("div.codeblock").center();
+        $("div.dimmed").fadeIn(300);
+        $("div.codeblock").fadeIn(300);
+        $("textarea.codearea").val(body);
+        $("span.codeblock-title").text("소스 코드 " + pk);
+      });
+
+      $("div.dimmed").click(function() {
+        closeCodeBlock();
+      })
+
+      function closeCodeBlock() {
+        $("div.dimmed").fadeOut(300);
+        $("div.codeblock").fadeOut(300);
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block startbody %}
+  <div class="dimmed"></div>
 {% endblock %}
 
 {% block content %}
@@ -31,7 +117,7 @@
         <tr>
           <th scope="col">채점 번호</th>
           <th scope="col">아이디</th>
-          <th scope="col" style>문제 번호</th>
+          <th scope="col">문제 번호</th>
           <th scope="col">언어</th>
           <th scope="col">코드 길이</th>
           <th scope="col">제출 시간</th>
@@ -42,7 +128,7 @@
       <tbody>
         {% for submit in submits %}
         <tr>
-          <th>{{ submit.id|stringformat:"06d" }}</th>
+          <td scope="row">{{ submit.pk|stringformat:"06d" }}</td>
           <td>{{ submit.user_pk }}</td>
           <td>
             <a href="{% url 'mainApp:problem' pk=submit.problem_pk.pk %}">
@@ -68,7 +154,7 @@
             {% endif %}
           </td>
           <td>
-            <a href="{% url 'mainApp:index' %}">
+            <a class="view-code" href="javascript: void(0);" data-pk="{{ submit.pk|stringformat:'06d' }}" data-body="{{ submit.body }}">
               <i class="fas fa-external-link-alt"></i> View
             </a>
           </td>
@@ -76,9 +162,8 @@
         {% endfor %}
       </tbody>
     </table>
+    <hr />
   </div>
-
-  <hr/>
 
   <div style="font-size: 18px;">
     {% for i in pages %}
@@ -99,6 +184,13 @@
       {{ i }}
     </a>
     {% endfor %}
+  </div>
+
+  <div class="codeblock">
+    <span class="codeblock-title"></span>
+    <button class="btn btn-sm btn-danger codeblock-close" type="button"><i class="fas fa-times"></i></button>
+    <div style="clear: both;"></div>
+    <textarea class="codearea"></textarea>
   </div>
 </div>
 {% endblock %}

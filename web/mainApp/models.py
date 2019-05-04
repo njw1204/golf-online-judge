@@ -22,6 +22,9 @@ class ProblemPost(models.Model):
     def get_absolute_url(self):
         return reverse("mainApp:problem", kwargs={"pk": self.pk})
 
+    def get_absolute_status_url(self):
+        return reverse("mainApp:problem-status", kwargs={"problem_pk": self.pk, "current_page": 1})
+
 class SolvePost(models.Model):
     LANG_CHOICES = (
         (1, "python3"),

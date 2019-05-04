@@ -18,73 +18,119 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
+  <script>
+    $(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    .wrapper {
+      min-height: 100%;
+      margin-bottom: -70px; /* Margin bottom by footer height */
+    }
+    .footer-push {
+      height: 70px;
+    }
+    .page-footer {
+      margin-top: 20px;
+      height: 50px; /* Set the fixed height of the footer here */
+      line-height: 50px; /* Vertically center the text there */
+      font-size: 13px;
+      background-color: #f0f0f0;
+    }
+    .page-footer i {
+      color: black;
+      font-size: 15px;
+    }
+    .tooltip-inner {
+      font-family: sans-serif;
+      font-size: 13px;
+    }
+  </style>
+
   {% block head %}{% endblock %}
 </head>
 
 <body>
-  {% block startbody %}{% endblock %}
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: 20px; font-size: 17px;">
-    <div class="container">
-      <a class="navbar-brand" href="/">
-        <img src="{% static 'mainApp/logo2.png' %}" style="max-height: 50px;" alt="" />
-      </a>
+  <div class="wrapper">
+    {% block startbody %}{% endblock %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: 20px; font-size: 17px;">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <img src="{% static 'mainApp/logo2.png' %}" style="max-height: 50px;" alt="" />
+        </a>
 
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
-        aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
+          aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <div class="collapse navbar-collapse" id="navbarToggler">
-        <ul class="nav navbar-nav mr-auto">
-          <li class="nav-item ml-lg-3">
-            <a class="nav-link" href="{% url 'mainApp:problems' current_page=1 %}">문제</a>
-          </li>
-          <li class="nav-item ml-lg-3">
-            <a class="nav-link" href="{% url 'mainApp:problem-status-all' current_page=1 %}">채점 현황</a>
-          </li>
-          <li class="nav-item ml-lg-3">
-            <a class="nav-link" href="/">랭킹</a>
-          </li>
-          <li class="nav-item ml-lg-3">
-            <a class="nav-link" href="/">게시판</a>
-          </li>
-        </ul>
+        <div class="collapse navbar-collapse" id="navbarToggler">
+          <ul class="nav navbar-nav mr-auto">
+            <li class="nav-item ml-lg-3">
+              <a class="nav-link" href="{% url 'mainApp:problems' current_page=1 %}">문제</a>
+            </li>
+            <li class="nav-item ml-lg-3">
+              <a class="nav-link" href="{% url 'mainApp:problem-status-all' current_page=1 %}">채점 현황</a>
+            </li>
+            <li class="nav-item ml-lg-3">
+              <a class="nav-link" href="/">랭킹</a>
+            </li>
+            <li class="nav-item ml-lg-3">
+              <a class="nav-link" href="/">게시판</a>
+            </li>
+          </ul>
 
-        <form>
-          <div class="input-group">
-            <input class="form-control" type="search" placeholder="검색">
-            <div class="input-group-append">
-              <button class="btn btn-success" type="button"><i class="fas fa-search"></i></button>
+          <form>
+            <div class="input-group">
+              <input class="form-control" type="search" placeholder="검색">
+              <div class="input-group-append">
+                <button class="btn btn-success" type="button"><i class="fas fa-search"></i></button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
+    </nav>
+
+    <div class="container" style="max-height: 999999px;">
+      <div>
+        {% if request.user.is_authenticated %}
+        User :
+        <strong>
+          {{ request.user }}
+        </strong>
+        {% else %}
+          로그인 후 문제를 풀 수 있습니다.
+        {% endif %}
+
+        {% if not request.user.is_authenticated %}
+        <a href="{% url 'login' %}" class="btn btn-outline-info" role="button" style="margin-left: 10px;">로그인</a>
+        {% else %}
+        <a href="{% url 'logout' %}" class="btn btn-outline-info" role="button" style="margin-left: 10px;">로그아웃</a>
+        {% endif %}
+      </div>
+      <hr />
+      {% block content %}{% endblock %}
     </div>
-  </nav>
 
-  <div class="container" style="max-height: 999999px;">
-
-    <div>
-      {% if request.user.is_authenticated %}
-      User :
-      <strong>
-        {{ request.user }}
-      </strong>
-      {% else %}
-        로그인 후 문제를 풀 수 있습니다.
-      {% endif %}
-
-      {% if not request.user.is_authenticated %}
-      <a href="{% url 'login' %}" class="btn btn-outline-info" role="button" style="margin-left: 10px;">로그인</a>
-      {% else %}
-      <a href="{% url 'logout' %}" class="btn btn-outline-info" role="button" style="margin-left: 10px;">로그아웃</a>
-      {% endif %}
-    </div>
-
-    <hr />
-
-    {% block content %}{% endblock %}
+    <div class="footer-push"></div>
   </div>
+
+  <footer class="page-footer">
+    <div class="text-center">
+      Copyright © 2019 njw1204, All rights reserved.
+      <span style="margin-right: 4px;"></span>
+      <a href="https://github.com/njw1204/" class="ml-1" target="_blank" data-toggle="tooltip" title="github.com/njw1204"><i class="fab fa-github"></i></a>
+      <a href="http://blog.njw.kr" class="ml-1" target="_blank" data-toggle="tooltip" title="blog.njw.kr"><i class="fas fa-blog"></i></a>
+      <a href="mailto://njw1204@naver.com?Subject=GOJ로%20보내는%20문의입니다" class="ml-1" data-toggle="tooltip" title="njw1204@naver.com"><i class="far fa-envelope"></i></a>
+    </div>
+  </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
@@ -100,6 +146,7 @@
     // {% endfor %}
   </script>
   {% endif %}
+
   {% block endbody %}{% endblock %}
 </body>
 

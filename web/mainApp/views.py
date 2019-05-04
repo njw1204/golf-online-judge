@@ -86,7 +86,7 @@ class ProblemSubmitView(CreateView):
         return context
 
     def get_success_url(self):
-        return self.kwargs["problem"].get_absolute_url()
+        return self.kwargs["problem"].get_absolute_status_url()
 
     def form_valid(self, form):
         self.object = form.save(commit=False)

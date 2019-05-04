@@ -4,10 +4,6 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto|Source+Code+Pro&subset=korean" rel="stylesheet">
 
   <style>
-    .tooltip-inner {
-      font-family: sans-serif;
-      font-size: 13px;
-    }
     .dimmed {
       display: none;
       position: fixed;
@@ -60,8 +56,6 @@
 
   <script>
     $(function() {
-      $('[data-toggle="tooltip"]').tooltip();
-
       jQuery.fn.center = function () {
         this.css("position", "absolute");
         this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) +
@@ -89,6 +83,12 @@
         closeCodeBlock();
       })
 
+      $(".reload-icon").hover(function() {
+        $(this).addClass("fa-spin");
+      }, function() {
+        $(this).removeClass("fa-spin");
+      })
+
       function closeCodeBlock() {
         $("div.dimmed").fadeOut(300);
         $("div.codeblock").fadeOut(300);
@@ -106,7 +106,7 @@
   <h4 class="mt-1">
     {{ heading }}&nbsp;
     <a href="javascript: location.reload(true);" data-placement="bottom" data-toggle="tooltip" title="새로고침">
-      <i class="fas fa-sync-alt"></i>
+      <i class="fas fa-sync-alt reload-icon"></i>
     </a>
   </h4>
   <br/>
@@ -144,7 +144,7 @@
           <td>
             {{ submit.created_date|date:"Y-m-d H:i:s" }}
           </td>
-          <td style="font-family: 'Roboto', sans-serif; letter-spacing: 1.5px;">
+          <td style="font-family: 'Roboto', sans-serif; letter-spacing: 1px;">
             {% if submit.result == 1 %}
               <span class="badge badge-success" data-toggle="tooltip" title="맞았습니다">OK</span>
             {% elif submit.result == 2 %}
@@ -155,14 +155,13 @@
           </td>
           <td>
             <a class="view-code" href="javascript: void(0);" data-pk="{{ submit.pk|stringformat:'06d' }}" data-body="{{ submit.body }}">
-              <i class="fas fa-external-link-alt"></i> View
+              <i class="fas fa-external-link-alt mr-1"></i>View
             </a>
           </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-    <hr />
   </div>
 
   <div style="font-size: 18px;">

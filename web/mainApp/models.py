@@ -42,3 +42,4 @@ class SolvePost(models.Model):
     result = models.PositiveSmallIntegerField(choices=RESULT_CHOICES, default=3)
     show = models.BooleanField(default=True)
     created_date = models.DateTimeField(auto_now_add=True)
+    ip = models.GenericIPAddressField()

@@ -11,5 +11,5 @@ class ProblemPostAdmin(admin.ModelAdmin):
 
 @admin.register(mainModels.SolvePost)
 class SolvePostAdmin(admin.ModelAdmin):
-    list_display = ["id", "user_pk", "problem_pk", "result", "show"]
+    list_display = ["id", "user_pk", "problem_pk", "result", "show", "ip", "created_date"]
     list_display_links = ["id"]

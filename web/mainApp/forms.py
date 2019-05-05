@@ -2,6 +2,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.db.models import Q
+from django.utils import timezone
 from .models import SolvePost
 
 class CustomUserCreateForm(UserCreationForm):
@@ -33,6 +35,8 @@ class CustomLoginForm(AuthenticationForm):
         self.fields["username"].label = "아이디"
 
 class SolvePostForm(forms.ModelForm):
+    POST_DURATION = 30 # x초 동안 한번 제출 가능
+
     class Meta:
         model = SolvePost
         fields = ("lang", "body")
@@ -48,6 +52,8 @@ class SolvePostForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        self.ip = kwargs.pop("ip")
         super().__init__(*args, **kwargs)
         self.fields["body"].strip = False
 
@@ -57,3 +63,15 @@ class SolvePostForm(forms.ModelForm):
             raise ValidationError("코드가 너무 짧습니다.")
         body = body.replace("\r\n", "\n")
         return body
+
+    def clean(self):
+        super().clean()
+        now_time = timezone.now()
+        base_time = now_time - timezone.timedelta(seconds=SolvePostForm.POST_DURATION)
+        query = SolvePost.objects.filter(Q(user_pk=self.user) | Q(ip=self.ip), created_date__gt=base_time)
+        if query.exists():
+            before_time = query.first().created_date
+            next_time = before_time + timezone.timedelta(seconds=SolvePostForm.POST_DURATION)
+            diff_time = next_time - now_time
+            raise ValidationError("%d초 후 제출할 수 있습니다." % diff_time.seconds)
+        return self.cleaned_data

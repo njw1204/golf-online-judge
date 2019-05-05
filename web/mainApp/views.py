@@ -4,10 +4,10 @@ from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib import messages
-from ipware import get_client_ip
 from .forms import CustomUserCreateForm
 from . import models as mainModels
 from . import forms as mainForms
+from . import utils
 from judge import tasks
 
 # Create your views here.
@@ -93,14 +93,14 @@ class ProblemSubmitView(CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
-        kwargs["ip"] = get_client_ip(self.request)[0] or "0.0.0.0"
+        kwargs["ip"] = utils.get_real_ip(self.request)
         return kwargs
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user_pk = self.request.user
         self.object.problem_pk = self.kwargs["problem"]
-        self.object.ip = get_client_ip(self.request)[0] or "0.0.0.0"
+        self.object.ip = utils.get_real_ip(self.request)
         self.object.save()
         tasks.activate_judge() # 채점 시스템 가동
         return redirect(self.get_success_url(), pk=self.kwargs["problem_pk"])

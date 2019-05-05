@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'crispy_forms',
     'disqus',
+    'background_task',
     'mainApp',
 ]
 
@@ -128,12 +129,15 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, ".static-bundle")
 
+# login & logout view
 LOGIN_REDIRECT_URL = 'mainApp:index'
 LOGOUT_REDIRECT_URL = 'mainApp:index'
 LOGIN_URL = 'login'
 
+# django-crispy-forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+# django-disqus
 DISQUS_API_SECRET = secret.DISQUS_API_SECRET
 DISQUS_API_KEY = secret.DISQUS_API_KEY
 DISQUS_WEBSITE_SHORTNAME = secret.DISQUS_WEBSITE_SHORTNAME
@@ -141,3 +145,6 @@ DISQUS_WEBSITE_SHORTNAME = secret.DISQUS_WEBSITE_SHORTNAME
 SITE_ID = 1
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+# django-background-tasks
+MAX_ATTEMPTS = 1

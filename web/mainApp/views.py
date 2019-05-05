@@ -7,6 +7,7 @@ from django.contrib import messages
 from .forms import CustomUserCreateForm
 from . import models as mainModels
 from . import forms as mainForms
+from judge import tasks
 
 # Create your views here.
 class SignupView(CreateView):
@@ -93,6 +94,7 @@ class ProblemSubmitView(CreateView):
         self.object.user_pk = self.request.user
         self.object.problem_pk = self.kwargs["problem"]
         self.object.save()
+        tasks.activate_judge()
         return redirect(self.get_success_url(), pk=self.kwargs["problem_pk"])
 
 

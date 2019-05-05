@@ -4,9 +4,9 @@ from background_task import background
 from mainApp.models import SolvePost
 from datetime import datetime
 
-CODE_SAVING_DIRECTORY = "./codes/"
-JUDGE_TESTCASE_DIRECTORY = "../../judge-testcase/"
-JUDGE_DOCKER_DIRECTORY = "../../judge-docker/"
+CODE_SAVING_DIRECTORY = "./judge/codes/"
+JUDGE_TESTCASE_DIRECTORY = "../judge-testcase/"
+JUDGE_DOCKER_DIRECTORY = "../judge-docker/"
 
 # 백그라운드 채점 시스템
 @background
@@ -21,7 +21,7 @@ def activate_judge():
 
             # generate source file name
             while True:
-                id = uuid.uuid4()
+                id = str(uuid.uuid4())
                 file_path = os.path.join(CODE_SAVING_DIRECTORY, id)
                 if not os.path.exists(file_path): break
 
@@ -30,7 +30,7 @@ def activate_judge():
                 code_file.write(submit.body)
 
             # execute judge script
-            if waits.lang == 1:
+            if submit.lang == 1:
                 exec_path = os.path.join(JUDGE_DOCKER_DIRECTORY, "python3", "exec.sh")
             else:
                 raise ValueError("Not Supported Language")

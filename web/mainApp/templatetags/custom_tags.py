@@ -1,4 +1,6 @@
 from django import template
+from goj import secret
+
 register = template.Library()
 
 @register.simple_tag
@@ -23,3 +25,7 @@ def human_readable(value, arg):
 @register.filter
 def length_in_bytes(value):
     return len(value.encode("utf-8"))
+
+@register.simple_tag
+def get_recaptcha_public():
+    return secret.RECAPTCHA_PUBLIC

@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db.models import Q
 from django.utils import timezone
 from .models import SolvePost
+from . import utils
 
 class CustomUserCreateForm(UserCreationForm):
     email = forms.EmailField(required=True, label="이메일", help_text="비밀번호 찾기용으로 사용합니다.")
@@ -14,6 +15,10 @@ class CustomUserCreateForm(UserCreationForm):
         labels = {
             "username": "아이디"
         }
+
+    def __init__(self, *args, **kwargs):
+        self.token = kwargs.pop("cap-token")
+        super().__init__(*args, **kwargs)
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -25,6 +30,8 @@ class CustomUserCreateForm(UserCreationForm):
 
     def clean(self):
         super().clean()
+        if not utils.verify_recaptcha(self.token):
+            raise ValidationError("reCAPTCHA 인증 실패")
         if User.objects.filter(email=self.cleaned_data.get("email")).exists():
             raise ValidationError({"email": "이미 등록된 이메일입니다."})
         return self.cleaned_data

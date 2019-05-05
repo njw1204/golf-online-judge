@@ -16,6 +16,11 @@ class SignupView(CreateView):
     form_class = CustomUserCreateForm
     success_url = reverse_lazy("mainApp:index")
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["cap-token"] = self.request.POST.get("g-recaptcha-response", "")
+        return kwargs
+
     def form_valid(self, form):
         self.object = form.save()
         login(self.request, self.object)

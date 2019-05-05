@@ -1,7 +1,7 @@
 # Deploy Guide
 
 #### Deploy(배포)를 위한 참고사항
-- **[필수]** 처음 설치시 judge-docker의 모든 하위 디렉토리에서 docker-build.sh 실행
+- **[필수]** 처음 설치시 docker-build-full.sh, 서버 구동시 docker-run-full.sh 실행
 - 파이썬 가상 환경 만들고 pip3 install -r requirements.txt
 - Django에서 쓰는 database는 기본값인 sqlite 말고 다른 것을 사용
 - Nginx + Gunicorn 조합으로 간단하게 운용 가능

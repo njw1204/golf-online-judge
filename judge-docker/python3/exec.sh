@@ -3,30 +3,27 @@
 # GolfJudge Python3 Solution Tester
 # exit code 0 : Accepted
 
-image_name="goj-python3" # docker image name
+con="goj-python3-container" # docker container name
 
 SCRIPTPATH=$( cd "$(dirname "$0")" ; pwd )
-UUID=$(uuidgen) # container & output file unique name
 ret=0 # exit code
 
 # docker variables
 time_limit=$4 # seconds
-memory_limit="128M"
 
 # problem variables
 source_file=$1
 input_testcase=$2
 output_testcase=$3
 
-echo "" > ${SCRIPTPATH}/${UUID}.out
-sudo docker create --log-driver=none -m ${memory_limit} --stop-timeout ${time_limit} -v ${SCRIPTPATH}/${UUID}.out:/judge/output.out --name ${UUID} ${image_name} > /dev/null 2>&1
-sudo docker cp ${source_file} ${UUID}:/judge/main.py > /dev/null 2>&1
-sudo docker cp ${input_testcase} ${UUID}:/judge/input.in > /dev/null 2>&1
+echo "" > ${SCRIPTPATH}/output.out
+sudo docker cp ${source_file} ${con}:/judge/main.py > /dev/null
+sudo docker cp ${input_testcase} ${con}:/judge/input.in > /dev/null
 
-sudo docker start ${UUID} > /dev/null 2>&1
-sudo docker stop ${UUID} > /dev/null 2>&1
+sudo docker start ${con} > /dev/null
+sudo docker stop -t ${time_limit} ${con} > /dev/null
 
-if [ "$(diff --ignore-trailing-space --ignore-space-change --ignore-blank-lines --text -q ${SCRIPTPATH}/${UUID}.out ${output_testcase} 2>&1)" = "" ]; then
+if [ "$(diff --ignore-trailing-space --ignore-space-change --ignore-blank-lines --text -q ${SCRIPTPATH}/output.out ${output_testcase} 2>&1)" = "" ]; then
   echo "pass"
   ret=0
 else
@@ -34,6 +31,5 @@ else
   ret=1
 fi
 
-sudo docker rm ${UUID} > /dev/null 2>&1
-rm ${SCRIPTPATH}/${UUID}.out
+sudo rm ${SCRIPTPATH}/output.out
 exit $ret

@@ -30,10 +30,10 @@ class CustomUserCreateForm(UserCreationForm):
 
     def clean(self):
         super().clean()
-        if not utils.verify_recaptcha(self.token):
-            raise ValidationError("reCAPTCHA 인증 실패")
         if User.objects.filter(email=self.cleaned_data.get("email")).exists():
             raise ValidationError({"email": "이미 등록된 이메일입니다."})
+        if not utils.verify_recaptcha(self.token):
+            raise ValidationError("reCAPTCHA 인증 실패")
         return self.cleaned_data
 
 class CustomLoginForm(AuthenticationForm):

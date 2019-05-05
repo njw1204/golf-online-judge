@@ -17,6 +17,11 @@ input_testcase=$2
 output_testcase=$3
 
 echo "" > ${SCRIPTPATH}/output.out
+
+if [ "$(sudo docker ps -a -f name=${con} --format {{.Names}})" != "${con}" ]; then
+  sudo bash ${SCRIPTPATH}/docker-run.sh
+fi
+
 sudo docker cp ${source_file} ${con}:/judge/main.py > /dev/null
 sudo docker cp ${input_testcase} ${con}:/judge/input.in > /dev/null
 

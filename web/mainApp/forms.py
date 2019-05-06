@@ -47,6 +47,11 @@ class CustomUserCreateForm(UserCreationForm):
         return self.cleaned_data
 
 class CustomLoginForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': "아이디와 비밀번호를 정확하게 입력해주세요.",
+        'inactive': "활성화되지 않은 계정입니다.",
+    }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["username"].label = "아이디"
@@ -57,7 +62,7 @@ class CustomLoginForm(AuthenticationForm):
         if real_username.exists():
             return real_username.first()["username"]
         else:
-            raise ValidationError("아이디가 존재하지 않습니다.")
+            return username
 
 class SolvePostForm(forms.ModelForm):
     POST_DURATION = 30 # x초 동안 한번 제출 가능

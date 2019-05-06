@@ -28,10 +28,20 @@ class CustomUserCreateForm(UserCreationForm):
             user.save()
         return user
 
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if User.objects.filter(username__iexact=username).exists():
+            raise ValidationError("이미 가입된 아이디입니다.")
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email__iexact=email).exists():
+            raise ValidationError("이미 등록된 이메일입니다.")
+        return email
+
     def clean(self):
         super().clean()
-        if User.objects.filter(email=self.cleaned_data.get("email")).exists():
-            raise ValidationError({"email": "이미 등록된 이메일입니다."})
         if not utils.verify_recaptcha(self.token):
             raise ValidationError("reCAPTCHA 인증 실패")
         return self.cleaned_data
@@ -40,6 +50,14 @@ class CustomLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["username"].label = "아이디"
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        real_username = User.objects.filter(username__iexact=username).values("username")
+        if real_username.exists():
+            return real_username.first()["username"]
+        else:
+            raise ValidationError("아이디가 존재하지 않습니다.")
 
 class SolvePostForm(forms.ModelForm):
     POST_DURATION = 30 # x초 동안 한번 제출 가능

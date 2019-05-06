@@ -3,6 +3,12 @@
 # Edit at https://www.gitignore.io/?templates=django,python,visualstudiocode
 
 .static-bundle/
+judge-testcase/*/
+!judge-testcase/1/
+!judge-testcase/2/
+!judge-testcase/3/
+!judge-testcase/4/
+!judge-testcase/5/
 
 ### Django ###
 *.log

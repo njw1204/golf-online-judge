@@ -25,5 +25,6 @@ urlpatterns = [
     path("submit/<int:problem_pk>/", mainViews.ProblemSubmitView.as_view(), name="problem-submit"),
     path("status/<int:problem_pk>/<int:current_page>/", mainViews.ProblemStatusView.as_view(), name="problem-status"),
     path("status-all/<int:current_page>/", mainViews.ProblemStatusView.as_view(), name="problem-status-all"),
+    path("make/", mainViews.ProblemMakeView.as_view(), name="problem-make"),
     path("<int:pk>/", mainViews.ProblemView.as_view(), name="problem"),
 ]

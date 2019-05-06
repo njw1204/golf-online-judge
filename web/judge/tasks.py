@@ -3,10 +3,7 @@ import os
 from background_task import background
 from mainApp.models import SolvePost
 from datetime import datetime
-
-CODE_SAVING_DIRECTORY = "./judge/codes/"
-JUDGE_TESTCASE_DIRECTORY = "../judge-testcase/"
-JUDGE_DOCKER_DIRECTORY = "../judge-docker/"
+from .judge_settings import *
 
 # 백그라운드 채점 시스템
 @background

@@ -1,0 +1,29 @@
+﻿{% extends "mainApp/base.html" %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+
+{% block head %}
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&subset=korean" rel="stylesheet">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <style>
+    #id_example_in, #id_example_out {
+      white-space: nowrap;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 18px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <br />
+    <div class="g-recaptcha" data-sitekey="{% get_recaptcha_public %}"></div>
+    <br />
+    <button type="submit" class="btn btn-success"><i class="fas fa-pen mr-1"></i>제작 완료</a></button>
+  </form>
+</div>
+{% endblock %}

@@ -16,7 +16,7 @@
 
 <body>
   <div class="container">
-    <form method="POST" action="{% url 'signup' %}">
+    <form method="POST">
       {% csrf_token %}
       {{ form|crispy }}
       <div class="g-recaptcha" data-sitekey="{% get_recaptcha_public %}"></div>

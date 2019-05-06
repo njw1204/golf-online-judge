@@ -1,14 +1,15 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib import messages
+from django.db import transaction
 from .forms import CustomUserCreateForm
 from . import models as mainModels
 from . import forms as mainForms
 from . import utils
-from judge import tasks
+from judge import tasks, problem
 
 # Create your views here.
 class SignupView(CreateView):
@@ -36,9 +37,10 @@ class ProblemListView(TemplateView):
     template_name = "mainApp/problem-list.html"
 
     def dispatch(self, request, *args, **kwargs):
-        problem_per_page = 3 # 한 페이지에 보여줄 문제수
+        problem_per_page = 10 # 한 페이지에 보여줄 문제수
 
-        kwargs["problem_total_count"] = mainModels.ProblemPost.objects.count() # 문제 총 개수
+        cache = mainModels.ProblemPost.objects.filter(show=True)
+        kwargs["problem_total_count"] = cache.count() # 문제 총 개수
         kwargs["last_page"] = kwargs["problem_total_count"] // problem_per_page + 1 # 마지막 페이지 번호
         if kwargs["problem_total_count"] % problem_per_page == 0:
             kwargs["last_page"] -= 1
@@ -53,7 +55,7 @@ class ProblemListView(TemplateView):
 
         show_start_range = (kwargs["current_page"] - 1) * problem_per_page
         show_end_range = show_start_range + problem_per_page
-        kwargs["problems"] = mainModels.ProblemPost.objects.order_by("pk")[show_start_range:show_end_range] # 현재 페이지에 보여줄 문제 목록
+        kwargs["problems"] = cache.order_by("pk")[show_start_range:show_end_range] # 현재 페이지에 보여줄 문제 목록
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -148,3 +150,24 @@ class ProblemStatusView(TemplateView):
         kwargs["submits"] = submits[show_start_range:show_end_range]
 
         return super().get(request, *args, **kwargs)
+
+
+class ProblemMakeView(CreateView):
+    template_name = "mainApp/problem-make.html"
+    form_class = mainForms.CreateProblemForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["cap-token"] = self.request.POST.get("g-recaptcha-response", "")
+        return kwargs
+
+    def form_valid(self, form):
+        try:
+            with transaction.atomic():
+                self.object = form.save()
+                problem.save_testcase(self.object.pk, form.cleaned_data["input_file"], form.cleaned_data["output_file"])
+        except:
+            messages.warning(self.request, "파일 업로드에 실패했습니다.")
+            return render(self.request, self.template_name, {"form": form})
+        messages.info(self.request, "문제가 생성되었습니다.")
+        return redirect("mainApp:problem", pk=self.object.pk)

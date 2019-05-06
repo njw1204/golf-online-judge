@@ -19,3 +19,24 @@ def verify_recaptcha(token):
             return False
     except:
         return False
+
+def KB(n):
+    return n * 1024
+
+def MB(n):
+    return KB(n) * 1024
+
+def GB(n):
+    return MB(n) * 1024
+
+def to_KB(n, integer=False):
+    if integer or n % 1024 == 0: return n // 1024
+    else: return n / 1024
+
+def to_MB(n, integer=False):
+    if integer or n % (1024 * 1024) == 0: return n // (1024 * 1024)
+    else: return n / (1024 * 1024)
+
+def to_GB(n, integer=False):
+    if integer or n % (1024 * 1024 * 1024) == 0: return n // (1024 * 1024 * 1024)
+    else: return n / (1024 * 1024 * 1024)

@@ -1,8 +1,10 @@
 # Deploy Guide
 
 #### Deploy(배포)를 위한 참고사항
-- **[필수]** 처음 설치시 docker-build-full.sh, 서버 구동시 docker-run-full.sh 실행
+- 처음 설치시 docker-build-full.sh, 서버 구동시 docker-run-full.sh 실행
 - 파이썬 가상 환경 만들고 pip3 install -r requirements.txt
+- web/goj/secret.py 설정
+- django-background-tasks 데몬으로 실행 (python3 manage.py process_tasks)
 - Django에서 쓰는 database는 기본값인 sqlite 말고 다른 것을 사용
 - Nginx + Gunicorn 조합으로 간단하게 운용 가능
 - Nginx에서 reverse proxy 형태로 Gunicorn 연결하고 static 파일도 따로 연결

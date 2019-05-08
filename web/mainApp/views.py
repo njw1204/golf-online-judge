@@ -101,6 +101,7 @@ class ProblemSubmitView(CreateView):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
         kwargs["ip"] = utils.get_real_ip(self.request)
+        kwargs["problem"] = self.kwargs["problem"]
         return kwargs
 
     def form_valid(self, form):

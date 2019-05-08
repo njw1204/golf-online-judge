@@ -87,14 +87,18 @@ class SolvePostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         self.ip = kwargs.pop("ip")
+        self.problem = kwargs.pop("problem")
         super().__init__(*args, **kwargs)
         self.fields["body"].strip = False
+        self.fields["body"].help_text = "시간 제한 : %d초 / 길이 제한 : %d바이트" % (self.problem.time_limit, self.problem.code_limit)
 
     def clean_body(self):
         body = self.cleaned_data["body"]
-        if type(body) != str or len(body.strip()) == 0:
+        if type(body) != str or len(body) == 0:
             raise ValidationError("코드가 너무 짧습니다.")
         body = body.replace("\r\n", "\n")
+        if len(body) > self.problem.code_limit:
+            raise ValidationError("코드가 너무 깁니다.")
         return body
 
     def clean(self):
@@ -118,10 +122,11 @@ class CreateProblemForm(forms.ModelForm):
 
     class Meta:
         model = ProblemPost
-        fields = ("title", "time_limit", "body", "input_explain", "output_explain", "example_in", "example_out")
+        fields = ("title", "time_limit", "code_limit", "body", "input_explain", "output_explain", "example_in", "example_out")
         labels = {
             "title": "문제 이름",
             "time_limit": "시간 제한",
+            "code_limit": "코드 길이 제한",
             "body": "본문",
             "input_explain": "입력 조건 및 설명",
             "output_explain": "출력 조건 및 설명",
@@ -131,6 +136,7 @@ class CreateProblemForm(forms.ModelForm):
         help_texts = {
             "title": "문제 목록에 노출되는 이름입니다.",
             "time_limit": "정수만 허용됩니다. 최소 1초, 최대 10초까지 가능합니다.",
+            "code_limit": "정수만 허용됩니다. 최소 10바이트, 최대 1000바이트까지 가능합니다.",
             "example_in": "문제에 공개되는 예제 입력입니다.",
             "example_out": "문제에 공개되는 예제 출력입니다.",
         }

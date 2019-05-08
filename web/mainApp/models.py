@@ -18,6 +18,7 @@ class ProblemPost(models.Model):
     example_in = models.TextField(max_length=1000, blank=True)
     example_out = models.TextField(max_length=1000, blank=True)
     time_limit = models.PositiveSmallIntegerField(validators=(MinValueValidator(1), MaxValueValidator(10),))
+    creator = models.ForeignKey("auth.User", null=True, on_delete=models.SET_NULL)
     created_date = models.DateTimeField(auto_now_add=True)
     show = models.BooleanField(default=True)
 

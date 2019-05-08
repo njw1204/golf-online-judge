@@ -165,9 +165,11 @@ class ProblemMakeView(CreateView):
         try:
             with transaction.atomic():
                 self.object = form.save()
+                self.object.creator = self.request.user
+                self.object.save()
                 problem.save_testcase(self.object.pk, form.cleaned_data["input_file"], form.cleaned_data["output_file"])
         except:
-            messages.warning(self.request, "파일 업로드에 실패했습니다.")
+            messages.warning(self.request, "문제 생성에 실패했습니다.")
             return render(self.request, self.template_name, {"form": form})
         messages.info(self.request, "문제가 생성되었습니다.")
         return redirect("mainApp:problem", pk=self.object.pk)

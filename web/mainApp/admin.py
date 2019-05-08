@@ -6,7 +6,7 @@ from . import models as mainModels
 
 @admin.register(mainModels.ProblemPost)
 class ProblemPostAdmin(admin.ModelAdmin):
-    list_display = ["id", "title", "creator", "time_limit", "created_date"]
+    list_display = ["id", "title", "creator", "time_limit", "code_limit", "created_date"]
     list_display_links = ["id", "title"]
 
 @admin.register(mainModels.SolvePost)

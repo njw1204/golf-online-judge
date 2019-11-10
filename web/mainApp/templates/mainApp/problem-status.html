@@ -45,8 +45,8 @@
     }
     textarea.codearea {
       position: absolute;
+      height: calc(100% - 30px);
       top: 30px;
-      bottom: 0;
       width: inherit;
       max-width: inherit;
       padding: 3px 5px;
@@ -54,7 +54,7 @@
       font-size: 14px;
       border: 0;
       resize: none;
-      white-space: nowrap;
+      white-space: pre;
     }
   </style>
 
@@ -75,7 +75,7 @@
 
       $("a.view-code").click(function() {
         var pk = $(this).attr("data-pk");
-        var body = $(this).attr("data-body");
+        var body = $("#code-" + pk).text();
         $("div.codeblock").center();
         $("div.dimmed").fadeIn(300);
         $("div.codeblock").fadeIn(300);
@@ -158,9 +158,10 @@
             {% endif %}
           </td>
           <td>
-            <a class="view-code" href="javascript: void(0);" data-pk="{{ submit.pk|stringformat:'06d' }}" data-body="{{ submit.body }}">
+            <a class="view-code" href="javascript: void(0);" data-pk="{{ submit.pk|stringformat:'06d' }}">
               <i class="fas fa-external-link-alt mr-1"></i>View
             </a>
+            <pre id="code-{{ submit.pk|stringformat:'06d' }}" style="display: none;">{{ submit.body }}</pre>
           </td>
         </tr>
         {% endfor %}

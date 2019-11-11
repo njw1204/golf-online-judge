@@ -65,7 +65,7 @@ class ProblemView(TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         # 현재 문제가 존재해야 됨
-        result = mainModels.ProblemPost.objects.filter(pk=kwargs["pk"])
+        result = mainModels.ProblemPost.objects.filter(pk=kwargs["pk"], show=True)
         if not result.exists():
             messages.info(request, "문제가 존재하지 않습니다.")
             return redirect("mainApp:index")
@@ -81,7 +81,7 @@ class ProblemSubmitView(CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         try:
-            self.kwargs["problem"] = mainModels.ProblemPost.objects.filter(pk=self.kwargs["problem_pk"]).first()
+            self.kwargs["problem"] = mainModels.ProblemPost.objects.filter(pk=self.kwargs["problem_pk"], show=True).first()
             if not request.user.is_authenticated:
                 messages.info(request, "로그인을 해주세요.")
                 return redirect(self.kwargs["problem"].get_absolute_url())
@@ -123,7 +123,7 @@ class ProblemStatusView(TemplateView):
         single_mode = False
         if "problem_pk" in kwargs:
             # problem_pk에 해당하는 문제가 존재하면 그에 맞는 채점 현황만 로드
-            result = mainModels.ProblemPost.objects.filter(pk=kwargs["problem_pk"])
+            result = mainModels.ProblemPost.objects.filter(pk=kwargs["problem_pk"], show=True)
             if result.exists():
                 submits = mainModels.SolvePost.objects.filter(problem_pk=result.first(), show=True).order_by("-pk")
                 kwargs["heading"] = str(kwargs["problem_pk"]) + "번 문제 채점 현황"
@@ -131,7 +131,7 @@ class ProblemStatusView(TemplateView):
 
         if not single_mode:
             # 그런 문제가 없으면 전체 채점 현황을 로드
-            submits = mainModels.SolvePost.objects.filter(show=True).order_by("-pk")
+            submits = mainModels.SolvePost.objects.select_related("problem_pk").filter(show=True, problem_pk__show=True).order_by("-pk")
             kwargs["heading"] = "전체 채점 현황"
 
         kwargs["single_mode"] = single_mode
